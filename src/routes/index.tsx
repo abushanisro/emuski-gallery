@@ -153,13 +153,13 @@ function Gallery() {
           <img
             src={emuskiLogo.url}
             alt="EMUSKI"
-            className="h-16 w-16 shadow-2xl"
+            className="h-10 w-10 shadow-2xl sm:h-16 sm:w-16"
           />
           <div className="text-center leading-none">
-            <p className="text-7xl font-bold tracking-[0.1em] text-white drop-shadow-lg sm:text-8xl">
+            <p className="text-5xl font-bold tracking-[0.1em] text-white drop-shadow-lg sm:text-7xl md:text-8xl">
               EMUSKI
             </p>
-            <p className="mt-0.5 font-mono text-xs uppercase tracking-[0.2em] text-white/60">
+            <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.2em] text-white/60 sm:text-xs">
               Manufacturing Excellence
             </p>
           </div>
@@ -213,23 +213,23 @@ function Gallery() {
 
       {/* ── Filters ── */}
       <section className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
-        <div className="mx-auto max-w-7xl space-y-3 px-6 py-4">
+        <div className="mx-auto max-w-7xl space-y-2 px-3 py-3 sm:px-6 sm:py-4">
           {view === "gallery" && (
             <button
               onClick={() => setView("folders")}
-              className="group inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium text-muted-foreground shadow-sm transition-all duration-200 hover:border-foreground/40 hover:bg-background hover:text-foreground hover:shadow-md"
+              className="group inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm transition-all duration-200 hover:border-foreground/40 hover:bg-background hover:text-foreground hover:shadow-md sm:px-4 sm:py-1.5 sm:text-sm"
             >
-              <ArrowLeft className="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5" />
+              <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5 sm:h-4 sm:w-4" />
               <span>Folders</span>
               {sector !== "All" && (
                 <>
                   <span className="text-border">/</span>
-                  <span className="text-foreground font-semibold">{sector}</span>
+                  <span className="font-semibold text-foreground">{sector}</span>
                 </>
               )}
             </button>
           )}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {["All", ...sectors].map((c) => {
               const active = sector === c;
               const n = counts[c] ?? 0;
@@ -237,7 +237,7 @@ function Gallery() {
                 <button
                   key={c}
                   onClick={() => { setSector(c); setView("gallery"); }}
-                  className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition sm:gap-2 sm:px-3 sm:py-1.5 sm:text-xs ${
                     active
                       ? "border-foreground bg-foreground text-background"
                       : "border-border bg-card text-muted-foreground hover:border-foreground/40 hover:text-foreground"
@@ -245,7 +245,7 @@ function Gallery() {
                 >
                   {c}
                   <span
-                    className={`rounded-full px-1.5 py-0.5 text-[10px] ${
+                    className={`rounded-full px-1 py-0.5 text-[9px] sm:px-1.5 sm:text-[10px] ${
                       active ? "bg-background/20" : "bg-muted"
                     }`}
                   >
@@ -262,26 +262,26 @@ function Gallery() {
                 <button
                   key={t}
                   onClick={() => setType(t)}
-                  className={`rounded-full px-3 py-1 capitalize transition ${
+                  className={`rounded-full px-2.5 py-1 capitalize transition sm:px-3 ${
                     type === t
                       ? "bg-foreground text-background"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {t === "all" ? "All media" : t + "s"}
+                  {t === "all" ? "All" : t + "s"}
                 </button>
               ))}
             </div>
-            <div className="flex items-center gap-3">
-              <span className="text-xs text-muted-foreground">
-                {filtered.length} of {galleryItems.length}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="shrink-0 text-xs text-muted-foreground">
+                {filtered.length}/{galleryItems.length}
               </span>
               <input
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search…"
-                className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm outline-none transition focus:border-foreground sm:w-64"
+                className="w-full rounded-full border border-border bg-card px-4 py-1.5 text-sm outline-none transition focus:border-foreground sm:w-64 sm:py-2"
               />
             </div>
           </div>
@@ -290,8 +290,8 @@ function Gallery() {
 
       {/* ── Folder View ── */}
       {view === "folders" && (
-        <section className="mx-auto max-w-7xl px-6 py-10">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <section className="mx-auto max-w-7xl px-3 py-6 sm:px-6 sm:py-10">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
             {sectors.map((s) => {
               const sectorItems = s === "All" ? galleryItems : galleryItems.filter((i) => i.sectors.includes(s));
               const images = Array.from(SECTOR_CARD_IMAGES[s] ?? SECTOR_CARD_IMAGES["All"]);
@@ -321,13 +321,13 @@ function Gallery() {
       {/* ── Masonry Grid ── */}
       {view === "gallery" && (
         <>
-          <section className="mx-auto max-w-7xl px-6 py-10">
+          <section className="mx-auto max-w-7xl px-3 py-6 sm:px-6 sm:py-10">
             {filtered.length === 0 ? (
               <p className="py-24 text-center text-muted-foreground">
                 No media match these filters.
               </p>
             ) : (
-              <div className="columns-2 gap-3 sm:columns-3 lg:columns-4 [&>*]:mb-3">
+              <div className="columns-2 gap-2 sm:columns-3 sm:gap-3 lg:columns-4 [&>*]:mb-2 sm:[&>*]:mb-3">
                 {filtered.map((it) => {
                   const isVideo = it.mime.startsWith("video/");
                   return (
@@ -367,30 +367,31 @@ function Gallery() {
       {/* ── Lightbox ── */}
       {lightbox && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-3 backdrop-blur sm:p-4"
           onClick={() => setLightbox(null)}
         >
           <button
             onClick={() => setLightbox(null)}
-            className="absolute right-4 top-4 rounded-full border border-white/20 px-3 py-1 text-xs text-white hover:bg-white/10"
+            className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-sm text-white hover:bg-white/10 sm:right-4 sm:top-4 sm:h-auto sm:w-auto sm:px-3 sm:py-1 sm:text-xs"
           >
-            Close ✕
+            <span className="sm:hidden">✕</span>
+            <span className="hidden sm:inline">Close ✕</span>
           </button>
           <figure
-            className="flex max-h-full max-w-6xl flex-col items-center gap-3"
+            className="flex max-h-full w-full max-w-6xl flex-col items-center gap-3"
             onClick={(e) => e.stopPropagation()}
           >
             {lightbox.mime.startsWith("video/") ? (
               <iframe
                 src={`https://drive.google.com/file/d/${lightbox.id}/preview`}
                 allow="autoplay"
-                className="h-[70vh] w-[90vw] max-w-5xl rounded-lg"
+                className="h-[60vh] w-full max-w-5xl rounded-lg sm:h-[70vh] sm:w-[90vw]"
               />
             ) : (
               <img
                 src={full(lightbox.id)}
                 alt={prettyName(lightbox.name)}
-                className="max-h-[80vh] w-auto rounded-lg object-contain"
+                className="max-h-[82vh] w-auto max-w-full rounded-lg object-contain"
               />
             )}
             <figcaption className="text-center text-white">
@@ -403,7 +404,7 @@ function Gallery() {
       )}
 
       {/* ── Footer ── */}
-      <footer className="relative bg-black pb-10 pt-20 min-h-[600px]">
+      <footer className="relative bg-black pb-10 pt-12 min-h-[400px] sm:pt-20 sm:min-h-[600px]">
         {/* Amber radial glow */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_60%,oklch(0.7_0.15_185/0.35),transparent_80%)]" />
 

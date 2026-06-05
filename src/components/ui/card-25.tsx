@@ -20,33 +20,63 @@ export const AnimatedHikeCard = React.forwardRef<
   HTMLDivElement,
   AnimatedHikeCardProps
 >(({ title, images, stats, description, onClick, className }, ref) => {
+  const [spread, setSpread] = React.useState(false);
+  const isTouch = React.useRef(false);
+
+  const handleMouseEnter = () => {
+    if (!isTouch.current) setSpread(true);
+  };
+  const handleMouseLeave = () => {
+    if (!isTouch.current) setSpread(false);
+  };
+  const handleClick = () => {
+    if (isTouch.current) {
+      if (!spread) {
+        setSpread(true);
+      } else {
+        setSpread(false);
+        onClick?.();
+      }
+    } else {
+      onClick?.();
+    }
+  };
+
   return (
     <div
       ref={ref}
-      onClick={onClick}
+      onTouchStart={() => { isTouch.current = true; }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
       className={cn(
-        "group relative block w-full cursor-pointer rounded-2xl border bg-card p-6 text-card-foreground shadow-sm transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg",
+        "relative block w-full cursor-pointer rounded-2xl border bg-card p-6 text-card-foreground shadow-sm transition-all duration-300 ease-in-out",
+        spread ? "-translate-y-1 shadow-lg" : "hover:-translate-y-1 hover:shadow-lg",
         className
       )}
     >
       <div className="flex flex-col">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl font-bold tracking-tight">{title}</h2>
-          <ArrowRight className="h-5 w-5 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
+          <ArrowRight
+            className={cn(
+              "h-5 w-5 transition-transform duration-300 ease-in-out",
+              spread && "translate-x-1"
+            )}
+          />
         </div>
 
-        {/* Images — transform driven entirely by CSS vars so hover classes win */}
         <div className="relative mb-6 h-28">
           {images.map((src, index) => (
             <div
               key={index}
-              className="absolute h-full w-[40%] overflow-hidden rounded-lg border-2 border-background shadow-md transition-all duration-300 ease-in-out [transform:translateX(var(--ix))] group-hover:[transform:translateX(var(--hx))_rotate(var(--hr))]"
+              className="absolute h-full w-[40%] overflow-hidden rounded-lg border-2 border-background shadow-md transition-all duration-300 ease-in-out"
               style={{
-                "--ix": `${index * 48}px`,
-                "--hx": `${index * 120}px`,
-                "--hr": `${index * 8 - 4}deg`,
+                transform: spread
+                  ? `translateX(${index * 120}px) rotate(${index * 8 - 4}deg)`
+                  : `translateX(${index * 48}px)`,
                 zIndex: images.length - index,
-              } as React.CSSProperties}
+              }}
             >
               <img
                 src={src}
