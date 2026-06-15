@@ -24,6 +24,8 @@ import imgRoboticsIndustry from "@/assets/Robotics/image.png";
 import imgRoboticsParts from "@/assets/Robotics/image2.png";
 import imgFieldWorkIndustry from "@/assets/cncfire.png";
 import imgFieldWorkParts from "@/assets/cnc.png";
+import imgManufacturingIndustry from "@/assets/manufaturing/image.png";
+import imgManufacturingParts from "@/assets/manufaturing/image1.png";
 import {
   ContainerScroll,
   ContainerSticky,
@@ -34,7 +36,25 @@ import { Canvas } from "@react-three/fiber";
 import { ParticleSphere } from "@/components/ui/cosmos-3d-orbit-gallery";
 import { PhotoGallery } from "@/components/ui/gallery";
 import { AnimatedHikeCard, type Stat } from "@/components/ui/card-25";
-import { Image, Video, Layers, Rocket, Shield, Plane, Wind, Sprout, Car, Crosshair, HeartPulse, Bot, HardHat, LayoutGrid, ArrowLeft } from "lucide-react";
+import { Image, Video, Layers, Rocket, Shield, Plane, Wind, Sprout, Car, Crosshair, HeartPulse, Bot, HardHat, Factory, LayoutGrid, ArrowLeft } from "lucide-react";
+
+const mfRaw = import.meta.glob<{ default: string }>(
+  "../assets/manufatuirng-facility/*",
+  { eager: true }
+);
+const localManufacturingItems = Object.entries(mfRaw).map(([path, mod]) => {
+  const filename = path.split("/").pop() ?? path;
+  const isVideo = /\.(mp4|mov)$/i.test(filename);
+  const isPng = /\.png$/i.test(filename);
+  return {
+    id: path,
+    name: filename,
+    mime: isVideo ? "video/mp4" : isPng ? "image/png" : "image/jpeg",
+    sectors: ["Manufacturing"],
+    album: "Manufacturing Facility",
+    localUrl: mod.default,
+  };
+});
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -67,6 +87,7 @@ const SECTOR_META: Record<string, { icon: React.ReactNode; description: string }
   "Healthcare":  { icon: <HeartPulse className="h-4 w-4" />,description: "Medical-grade precision components for healthcare applications." },
   "Robotics":    { icon: <Bot className="h-4 w-4" />,       description: "Engineered systems and components driving robotic innovation." },
   "Field Work":  { icon: <HardHat className="h-4 w-4" />,   description: "Durable equipment and documentation from demanding field operations." },
+  "Manufacturing": { icon: <Factory className="h-4 w-4" />, description: "State-of-the-art manufacturing facilities and precision production processes." },
 };
 
 const SECTOR_CARD_IMAGES: Record<string, [string, string]> = {
@@ -81,6 +102,7 @@ const SECTOR_CARD_IMAGES: Record<string, [string, string]> = {
   "Healthcare":  [imgHealthcareIndustry, imgHealthcareParts],
   "Robotics":    [imgRoboticsIndustry,   imgRoboticsParts],
   "Field Work":  [imgFieldWorkIndustry,  imgFieldWorkParts],
+  "Manufacturing": [imgManufacturingIndustry, imgManufacturingParts],
 };
 
 const HERO_COL_1 = [
@@ -122,9 +144,11 @@ function Gallery() {
   const [query, setQuery] = useState("");
   const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
 
+  const allItems = useMemo(() => [...galleryItems, ...localManufacturingItems], []);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return galleryItems.filter((it) => {
+    return allItems.filter((it) => {
       if (sector !== "All" && !it.sectors.includes(sector)) return false;
       if (type === "image" && !it.mime.startsWith("image/")) return false;
       if (type === "video" && !it.mime.startsWith("video/")) return false;
@@ -138,11 +162,11 @@ function Gallery() {
   }, [sector, type, query]);
 
   const counts = useMemo(() => {
-    const s: Record<string, number> = { All: galleryItems.length };
+    const s: Record<string, number> = { All: allItems.length };
     for (const x of sectors)
-      s[x] = galleryItems.filter((i) => i.sectors.includes(x)).length;
+      s[x] = allItems.filter((i) => i.sectors.includes(x)).length;
     return s;
-  }, []);
+  }, [allItems]);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -274,7 +298,7 @@ function Gallery() {
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
               <span className="shrink-0 text-xs text-muted-foreground">
-                {filtered.length}/{galleryItems.length}
+                {filtered.length}/{allItems.length}
               </span>
               <input
                 type="search"
@@ -293,7 +317,7 @@ function Gallery() {
         <section className="mx-auto max-w-7xl px-3 py-6 sm:px-6 sm:py-10">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
             {sectors.map((s) => {
-              const sectorItems = s === "All" ? galleryItems : galleryItems.filter((i) => i.sectors.includes(s));
+              const sectorItems = s === "All" ? allItems : allItems.filter((i) => i.sectors.includes(s));
               const images = Array.from(SECTOR_CARD_IMAGES[s] ?? SECTOR_CARD_IMAGES["All"]);
               const imgCount = sectorItems.filter((i) => i.mime.startsWith("image/")).length;
               const vidCount = sectorItems.filter((i) => i.mime.startsWith("video/")).length;
@@ -337,7 +361,7 @@ function Gallery() {
                       className="group relative block w-full overflow-hidden rounded-lg border border-border bg-muted"
                     >
                       <img
-                        src={thumb(it.id, 600)}
+                        src={it.localUrl ?? thumb(it.id, 600)}
                         alt={prettyName(it.name)}
                         loading="lazy"
                         className="w-full transition duration-500 group-hover:scale-[1.03]"
@@ -382,14 +406,23 @@ function Gallery() {
             onClick={(e) => e.stopPropagation()}
           >
             {lightbox.mime.startsWith("video/") ? (
-              <iframe
-                src={`https://drive.google.com/file/d/${lightbox.id}/preview`}
-                allow="autoplay"
-                className="h-[60vh] w-full max-w-5xl rounded-lg sm:h-[70vh] sm:w-[90vw]"
-              />
+              lightbox.localUrl ? (
+                <video
+                  src={lightbox.localUrl}
+                  controls
+                  autoPlay
+                  className="h-[60vh] w-full max-w-5xl rounded-lg sm:h-[70vh] sm:w-[90vw]"
+                />
+              ) : (
+                <iframe
+                  src={`https://drive.google.com/file/d/${lightbox.id}/preview`}
+                  allow="autoplay"
+                  className="h-[60vh] w-full max-w-5xl rounded-lg sm:h-[70vh] sm:w-[90vw]"
+                />
+              )
             ) : (
               <img
-                src={full(lightbox.id)}
+                src={lightbox.localUrl ?? full(lightbox.id)}
                 alt={prettyName(lightbox.name)}
                 className="max-h-[82vh] w-auto max-w-full rounded-lg object-contain"
               />
