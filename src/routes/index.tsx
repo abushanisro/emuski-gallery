@@ -42,7 +42,7 @@ const mfRaw = import.meta.glob<{ default: string }>(
   "../assets/manufatuirng-facility/*",
   { eager: true }
 );
-const localManufacturingItems = Object.entries(mfRaw).map(([path, mod]) => {
+const localManufacturingItems = Object.entries(mfRaw).filter(([path]) => !path.includes("IMG_1026")).map(([path, mod]) => {
   const filename = path.split("/").pop() ?? path;
   const isVideo = /\.(mp4|mov)$/i.test(filename);
   const isPng = /\.png$/i.test(filename);
@@ -360,15 +360,24 @@ function Gallery() {
                       onClick={() => setLightbox(it)}
                       className="group relative block w-full overflow-hidden rounded-lg border border-border bg-muted"
                     >
-                      <img
-                        src={it.localUrl ?? thumb(it.id, 600)}
-                        alt={prettyName(it.name)}
-                        loading="lazy"
-                        className="w-full transition duration-500 group-hover:scale-[1.03]"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).style.opacity = "0.2";
-                        }}
-                      />
+                      {isVideo && it.localUrl ? (
+                        <video
+                          src={it.localUrl}
+                          muted
+                          preload="metadata"
+                          className="w-full transition duration-500 group-hover:scale-[1.03]"
+                        />
+                      ) : (
+                        <img
+                          src={it.localUrl ?? thumb(it.id, 600)}
+                          alt={prettyName(it.name)}
+                          loading="lazy"
+                          className="w-full transition duration-500 group-hover:scale-[1.03]"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).style.opacity = "0.2";
+                          }}
+                        />
+                      )}
                       {isVideo && (
                         <span className="absolute left-2 top-2 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-white">
                           ▶ Video

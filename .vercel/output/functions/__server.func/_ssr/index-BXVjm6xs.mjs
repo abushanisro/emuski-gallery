@@ -1,5 +1,5 @@
 import { r as reactExports, j as jsxRuntimeExports } from "../_libs/react.mjs";
-import { e as emuskiLogo } from "./router-CaPD4xdZ.mjs";
+import { e as emuskiLogo } from "./router-u70_MYuJ.mjs";
 import { c as clsx } from "../_libs/clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { C as Canvas, u as useFrame } from "../_libs/react-three__fiber.mjs";
@@ -680,7 +680,7 @@ const mfRaw = /* @__PURE__ */ Object.assign({
   "../assets/manufatuirng-facility/place.png": __vite_glob_0_22,
   "../assets/manufatuirng-facility/place2.png": __vite_glob_0_23
 });
-const localManufacturingItems = Object.entries(mfRaw).map(([path, mod]) => {
+const localManufacturingItems = Object.entries(mfRaw).filter(([path]) => !path.includes("IMG_1026")).map(([path, mod]) => {
   const filename = path.split("/").pop() ?? path;
   const isVideo = /\.(mp4|mov)$/i.test(filename);
   const isPng = /\.png$/i.test(filename);
@@ -861,7 +861,7 @@ function Gallery() {
     view === "gallery" && /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "mx-auto max-w-7xl px-3 py-6 sm:px-6 sm:py-10", children: filtered.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "py-24 text-center text-muted-foreground", children: "No media match these filters." }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "columns-2 gap-2 sm:columns-3 sm:gap-3 lg:columns-4 [&>*]:mb-2 sm:[&>*]:mb-3", children: filtered.map((it) => {
       const isVideo = it.mime.startsWith("video/");
       return /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { onClick: () => setLightbox(it), className: "group relative block w-full overflow-hidden rounded-lg border border-border bg-muted", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: it.localUrl ?? thumb(it.id, 600), alt: prettyName(it.name), loading: "lazy", className: "w-full transition duration-500 group-hover:scale-[1.03]", onError: (e) => {
+        isVideo && it.localUrl ? /* @__PURE__ */ jsxRuntimeExports.jsx("video", { src: it.localUrl, muted: true, preload: "metadata", className: "w-full transition duration-500 group-hover:scale-[1.03]" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: it.localUrl ?? thumb(it.id, 600), alt: prettyName(it.name), loading: "lazy", className: "w-full transition duration-500 group-hover:scale-[1.03]", onError: (e) => {
           e.currentTarget.style.opacity = "0.2";
         } }),
         isVideo && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "absolute left-2 top-2 rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-white", children: "▶ Video" }),
