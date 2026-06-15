@@ -75,17 +75,17 @@ const createLucideIcon = (iconName, iconNode) => {
   Component.displayName = toPascalCase(iconName);
   return Component;
 };
-const __iconNode$f = [
+const __iconNode$g = [
   ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
   ["path", { d: "M19 12H5", key: "x3x0zl" }]
 ];
-const ArrowLeft = createLucideIcon("arrow-left", __iconNode$f);
-const __iconNode$e = [
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$g);
+const __iconNode$f = [
   ["path", { d: "M5 12h14", key: "1ays0h" }],
   ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
 ];
-const ArrowRight = createLucideIcon("arrow-right", __iconNode$e);
-const __iconNode$d = [
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$f);
+const __iconNode$e = [
   ["path", { d: "M12 8V4H8", key: "hb8ula" }],
   ["rect", { width: "16", height: "12", x: "4", y: "8", rx: "2", key: "enze0r" }],
   ["path", { d: "M2 14h2", key: "vft8re" }],
@@ -93,8 +93,8 @@ const __iconNode$d = [
   ["path", { d: "M15 13v2", key: "1xurst" }],
   ["path", { d: "M9 13v2", key: "rq6x2g" }]
 ];
-const Bot = createLucideIcon("bot", __iconNode$d);
-const __iconNode$c = [
+const Bot = createLucideIcon("bot", __iconNode$e);
+const __iconNode$d = [
   [
     "path",
     {
@@ -106,15 +106,28 @@ const __iconNode$c = [
   ["path", { d: "M9 17h6", key: "r8uit2" }],
   ["circle", { cx: "17", cy: "17", r: "2", key: "axvx0g" }]
 ];
-const Car = createLucideIcon("car", __iconNode$c);
-const __iconNode$b = [
+const Car = createLucideIcon("car", __iconNode$d);
+const __iconNode$c = [
   ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
   ["line", { x1: "22", x2: "18", y1: "12", y2: "12", key: "l9bcsi" }],
   ["line", { x1: "6", x2: "2", y1: "12", y2: "12", key: "13hhkx" }],
   ["line", { x1: "12", x2: "12", y1: "6", y2: "2", key: "10w3f3" }],
   ["line", { x1: "12", x2: "12", y1: "22", y2: "18", key: "15g9kq" }]
 ];
-const Crosshair = createLucideIcon("crosshair", __iconNode$b);
+const Crosshair = createLucideIcon("crosshair", __iconNode$c);
+const __iconNode$b = [
+  ["path", { d: "M12 16h.01", key: "1drbdi" }],
+  ["path", { d: "M16 16h.01", key: "1f9h7w" }],
+  [
+    "path",
+    {
+      d: "M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z",
+      key: "1iv0i2"
+    }
+  ],
+  ["path", { d: "M8 16h.01", key: "18s6g9" }]
+];
+const Factory = createLucideIcon("factory", __iconNode$b);
 const __iconNode$a = [
   ["path", { d: "M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5", key: "1p9q5i" }],
   ["path", { d: "M14 6a6 6 0 0 1 6 6v3", key: "1hnv84" }],
@@ -242,6 +255,7 @@ export {
   ArrowLeft as A,
   Bot as B,
   Crosshair as C,
+  Factory as F,
   HardHat as H,
   Image as I,
   Layers as L,
